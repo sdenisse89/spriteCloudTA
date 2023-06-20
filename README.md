@@ -5,7 +5,7 @@ CI/CD API/UI automated tests
 
 ### Motivation
 
-I chose to implement 2 test scenarios which I felt were the most important
+I chose to implement 2 test scenarios which I felt were the most important for a general web store.
 
 1) A user logging in and purchasing a pet
 
@@ -27,11 +27,21 @@ This test must run periodically but should also be triggered by any changes to t
 ### how to run
 
 The tests created in Python, using the UnitTest and 'requests' libraries.
-They can run on any system with the required libraries and and internet connection (to reach https://petstore.swagger.io).
+They can run on any system with the required libraries and internet connection (to reach https://petstore.swagger.io).
 
 ## WEB tests
 
-## repository files
+### Motivation
+
+I have described 2 tests which together should cover a large amount of errors, especially in the later stages of development where incremental changes to the overall page are more common.
+
+They will be quick and can therefore be triggered by any commit from a designer.
+
+### How to run
+
+These tests have not been implemented.
+
+## Repository files
 - test_scenarios.txt: a description of test scenarios, along with an indication on their status
 - test_api.py: UnitTest tests covering 2 API scenarios
 - test_utils.py: contains data-arrays and helper functions for the API test procedures

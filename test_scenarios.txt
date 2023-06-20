@@ -1,6 +1,6 @@
 * THIS FILE CONTAINS A LIST OF TEST SCENARIOS TO BE IMPLEMENTED
 
-# API scenario's to consider
+# API scenarios
 #---------------------------------
 
 ## SCENARIO A_1: a regular user performing regular tasks
@@ -43,10 +43,27 @@
 		GET /user/logout
 	2) user "USER_E" tries to request and delete  other user's data
 		GET /user/login {username="USER_E",password="pwE"}	returns 200 (success)
-		GET /user/"USER_A"	returns 400 (invalid username)
+		GET /user/"USER_A"		returns 400 (invalid username)
 		DELETE /user/"USER_A"	returns 400 (invalid username)
 		GET /user/logout
 
-
-# WEB scenario's to consider
+# WEB scenarios
 #---------------------------------
+
+## SCENARIO W_1: find all clickable objects and click them
+
+In this test we go over all objects on the web page and click them, recording the action taken.
+
+Verifications:
+	- We should find the right number of objects and all should be visible;
+	- Clicking an object should never result in a 404 page or throw an error of any kind;
+	- The resulting action should match the expected behavior, listed separately;
+
+## SCENARIO W_2: compare snapshots
+
+In this test we take screenshots of all states of the webpage and compare them to a database of expected images.
+
+Should be disregarded:
+	- dates, version and copyright fields;
+	- images/content externaly sourced;
+		REMARK: the proper display of these items should be the subject of additional tests!

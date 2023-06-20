@@ -1,0 +1,6 @@
+* THIS FILE CONTAINS A LIST OF TEST SCENARIOS TO BE IMPLEMENTED
+# API scenario's to consider
+#---------------------------------
+
+# WEB scenario's to consider
+#---------------------------------

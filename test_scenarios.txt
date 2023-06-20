@@ -20,7 +20,7 @@
 	3) user tries to order a pet without being logged in
 		POST /store/order {id=1,petId=1,quantity=1)	returns 400 (invalid order)
 	4) user logs in
-		GET /users/login {username="USER_A",password="pwA"}	returns 200 (success)
+		GET /user/login {username="USER_A",password="pwA"}	returns 200 (success)
 	5) user tries to order a pet being logged in
 		POST /store/order {id=1,petId=1,quantity=1)	returns 200 {id=<orderId>} (success)
 	6) ADMIN requests status of the order
@@ -41,7 +41,7 @@
 		GET /user/"USER_A"	returns 200 {password="pwA",...}
 			REMARK: the system should NEVER be able to return a plaintext password in real life!!
 		GET /user/logout
-	2) user "USER_E" tries to request and delete other user's data
+	2) user "USER_E" tries to request and delete  other user's data
 		GET /user/login {username="USER_E",password="pwE"}	returns 200 (success)
 		GET /user/"USER_A"	returns 400 (invalid username)
 		DELETE /user/"USER_A"	returns 400 (invalid username)

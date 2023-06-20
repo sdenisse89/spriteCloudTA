@@ -1,6 +1,52 @@
 * THIS FILE CONTAINS A LIST OF TEST SCENARIOS TO BE IMPLEMENTED
+
 # API scenario's to consider
 #---------------------------------
+
+## SCENARIO A_1: a regular user performing regular tasks
+
+	0) prerequisites
+		- user "USER_A" (id=1,password="pwA") exists on the system
+		- pets exist on the system:
+			"PET_A" (id=1, status=available)
+			"PET_B" (id=2, status=pending)
+			"PET_X" (id=10,status=sold)
+	1) user requests an existing pet, without being logged in
+		GET /pet/1	returns 200 {<pet "PET_A" data>}
+		GET /pet/2	returns 200 {<pet "PET_B" data>}
+		GET /pet/10	returns 200 {<pet "PET_X" data>}
+	2) user requests a non-existing pet
+		GET /pet/5	returns 404 (pet not found)
+	3) user tries to order a pet without being logged in
+		POST /store/order {id=1,petId=1,quantity=1)	returns 400 (invalid order)
+	4) user logs in
+		GET /users/login {username="USER_A",password="pwA"}	returns 200 (success)
+	5) user tries to order a pet being logged in
+		POST /store/order {id=1,petId=1,quantity=1)	returns 200 {id=<orderId>} (success)
+	6) ADMIN requests status of the order
+		GET /store/order/<orderId>	200 {status=placed} (success)
+
+## SCENARIO A_2: a mallicious user trying to abuse the system
+
+	0) prerequisites
+		- users exist on the system
+			"USER_A" (id=1,password="pwA") exists on the system
+			"USER_E" (id=1,password="pwE") exists on the system
+		- pets exist on the system:
+			"PET_A" (id=1, status=available)
+			"PET_B" (id=2, status=pending)
+			"PET_X" (id=10,status=sold)
+	1) user "USER_A" requests his own data
+		GET /user/login {username="USER_A",password="pwA"}	returns 200 (success)
+		GET /user/"USER_A"	returns 200 {password="pwA",...}
+			REMARK: the system should NEVER be able to return a plaintext password in real life!!
+		GET /user/logout
+	2) user "USER_E" tries to request and delete other user's data
+		GET /user/login {username="USER_E",password="pwE"}	returns 200 (success)
+		GET /user/"USER_A"	returns 400 (invalid username)
+		DELETE /user/"USER_A"	returns 400 (invalid username)
+		GET /user/logout
+
 
 # WEB scenario's to consider
 #---------------------------------

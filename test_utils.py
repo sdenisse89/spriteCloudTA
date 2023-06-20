@@ -12,39 +12,20 @@ api_headers ={'accept':'application/json','Content-Type':'application/json'}
 #=========================================================
 data_pet_a = {
 	"id": 1,
-	"category": {
-		"id": 0,
-		"name": "dog"
+	"category": {"id": 0,"name": "dog"
 	},
 	"name": "PET_A",
-	"photoUrls": [
-		"someurl"
-	],
-	"tags": [
-		{
-		"id": 0,
-		"name": "string"
-		}
-	],
+	"photoUrls": ["someurl"],
+	"tags": [{"id": 0,"name": "string"}],
 	"status": "available"
 }
 
 data_pet_b = {
 	"id": 2,
-	"category": {
-		"id": 1,
-		"name": "cat"
-	},
+	"category": {"id": 1,"name": "cat"},
 	"name": "PET_B",
-	"photoUrls": [
-	"someurl"
-	],
-	"tags": [
-		{
-		"id": 0,
-		"name": "string"
-		}
-	],
+	"photoUrls": ["someurl"],
+	"tags": [{"id": 0,"name": "string"}],
 	"status": "pending"
 }
 

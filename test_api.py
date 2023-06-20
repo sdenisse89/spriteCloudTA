@@ -12,11 +12,11 @@ class ApiUserOrder(TestCase):
 		"""
 
 		# create user USER_A
-		http_post('user/createWithArray',params=[data_user_a])
+		http_post('user/createWithArray',data=data_user_a)
 		# create pets
-		http_post('pet',params=data_pet_a)
-		http_post('pet',params=data_pet_b)
-		http_post('pet',params=data_pet_x)
+		http_post('pet',data=data_pet_a)
+		http_post('pet',data=data_pet_b)
+		http_post('pet',data=data_pet_x)
 
 	def tearDown(self):
 		""" cleans up all users,pets
@@ -32,29 +32,29 @@ class ApiUserOrder(TestCase):
 	def test_getpet_nologin(self):
 		""" ACTION 1) user requests status of pets without login
 		"""
-		response_getA = http_get('pet/'+str(data_pet_a.get('id'))).json()
-		assertEqual(response_getA.get('code'),		200)
-		assertEqual(response_getA.get('status'),	'available')
+		response_getA = http_get('pet/'+str(data_pet_a.get('id')))
+		self.assertEqual(response_getA.status_code,		200,				'could not get data of PET_A')
+		self.assertEqual(response_getA.json().get('status'),	'available', 		'PET_A has wrong status')
 		
-		response_getB = http_get('pet/'+str(data_pet_b.get('id'))).json()
-		assertEqual(response_getB.get('code'),		200)
-		assertEqual(response_getB.get('status'),	'pending')
+		response_getB = http_get('pet/'+str(data_pet_b.get('id')))
+		self.assertEqual(response_getB.status_code,		200,				'could not get data of PET_B')
+		self.assertEqual(response_getB.json().get('status'),	'pending', 			'PET_B has wrong status')
 
-		response_getX = http_get('pet/'+str(data_pet_x.get('id'))).json()
-		assertEqual(response_getX.get('code'),		200)
-		assertEqual(response_getB.get('status'),	'sold')
+		response_getX = http_get('pet/'+str(data_pet_x.get('id')))
+		self.assertEqual(response_getX.status_code,		200,				'could not get data of PET_X')
+		self.assertEqual(response_getB.json().get('status'),	'sold', 			'PET_X has wrong status')
 		
 	def test_getpet_nopet(self):
 		""" ACTION 2) user requests status of pets that do not exist
 		"""
-		response_get = http_get('pet/5').json()
-		assertEqual(response_get.get('code'),		404)
+		response_get = http_get('pet/5')
+		self.assertEqual(response_get.status_code,		404, 				'got wrong code for invalid pet')
 
 	def test_orderpet_nologin(self):
 		""" ACTION 3) user tries to order a pet without having logged in
 		"""
-		response_order = http_post('store/order',params=data_order_petA).json()
-		assertEqual(response_order.get('code'),		400) #invalid order
+		response_order = http_post('store/order',data=data_order_petA)
+		self.assertEqual(response_order.status_code,		400, 			'order should have been rejected') #invalid order
 
 	def test_orderpet_login_status(self):
 		""" ACTION 4-5-6) user tries to order a pet after having logged in
@@ -62,22 +62,22 @@ class ApiUserOrder(TestCase):
 		"""
 		
 		# login
-		response_login = http_get('user/login',params={ 'username':data_user_a.get('username'),
+		response_login = http_get('user/login',data={ 'username':data_user_a.get('username'),
 														'password':data_user_a.get('password')}).json()
-		assertEqual(response_login.get('code'),		200) #valid login
+		self.assertEqual(response_login.get('code'),		200, 			'login should have passed') #valid login
 		
 		# place order
-		response_order = http_post('store/order',params=data_order_petA).json()
-		assertEqual(response_order.get('code'),		200) #valid order
+		response_order = http_post('store/order',data=data_order_petA).json()
+		self.assertEqual(response_order.get('code'),		200, 			'order should have been successful') #valid order
 		# TODO get order-id from response
 		orderId = 1
 		response_status = http_get('store/order/'+str(orderId)).json()
-		assertEqual(response_order.get('code'),		200) #valid
-		assertEqual(response_order.get('status'),	'placed') #valid
+		self.assertEqual(response_order.get('code'),		200, 			'get order status failed') #valid
+		self.assertEqual(response_order.get('status'),	'placed',  			'order status is wrong') #valid
 		
 		# logout
 		response_logout = http_get('user/logout').json()
-		assertEqual(response_logout.get('code'),	200) #valid
+		self.assertEqual(response_logout.get('code'),	200, 				'logout failed') #valid
 
 class ApiUserMalicious(TestCase):
 	""" IMPLEMENTS TESTCASE A_2
@@ -88,10 +88,10 @@ class ApiUserMalicious(TestCase):
 			2 users "USER_A", "USER_E"
 			3 pets "PET_A" "PET_B" "PET_X" (not required)
 		"""
-		 create user USER_A
-		http_post('user/createWithArray',params=[data_user_a])
+		# create user USER_A
+		http_post('user/createWithArray',data=data_user_a)
 		# create user USER_E
-		http_post('user/createWithArray',params=[data_user_e])
+		http_post('user/createWithArray',data=data_user_e)
 
 	def tearDown(self):
 		""" cleans up all users,pets
@@ -104,34 +104,34 @@ class ApiUserMalicious(TestCase):
 	def test_userA_getdata(self):
 		""" ACTION 1) user "USER_A" requests their own data (valid)
 		"""
-		response_login = http_get('user/login',params={ 'username':data_user_a.get('username'),
-														'password':data_user_a.get('password')}).json()
-		assertEqual(response_login.get('code'),		200) #valid login
+		response_login = http_get('user/login',data={ 'username':data_user_a.get('username'),
+														'password':data_user_a.get('password')})
+		self.assertEqual(response_login.status_code,		200, 'expected valid login for user USER_A') #valid login
 		
 		# try and get data
-		response_get = http_get('user/'+data_user_a.get('username')).json()
-		assertEqual(response_.get('code'),		200) #valid
+		response_get = http_get('user/'+data_user_a.get('username'))
+		self.assertEqual(response_get.status_code,		200, 'USER_A could not get their own data') #valid
 		# TODO verify data
 		
 		# logout
-		response_logout = http_get('user/logout').json()
-		assertEqual(response_logout.get('code'),	200) #valid
+		response_logout = http_get('user/logout')
+		self.assertEqual(response_logout.status_code,	200, 'logout failed') #valid
 
 	def test_userE_getdata(self):
 		""" ACTION 2) user "USER_E" attempts to get data from USER_A
 		"""
-		response_login = http_get('user/login',params={ 'username':data_user_e.get('username'),
-														'password':data_user_e.get('password')}).json()
-		assertEqual(response_login.get('code'),		200) #valid login
+		response_login = http_get('user/login',data={	'username':data_user_e.get('username'),
+														'password':data_user_e.get('password')})
+		self.assertEqual(response_login.status_code,		200, 'expected valid login for user USER_E') #valid login
 		
 		# try and get data
-		response_get = http_get('user/'+data_user_a.get('username')).json()
-		assertEqual(response_get.get('code'),		400) #valid
+		response_get = http_get('user/'+data_user_a.get('username'))
+		self.assertEqual(response_get.status_code,		400, 'USER_E could get data from USER_A') #valid
 		# TODO verify data
 		
 		# logout
 		response_logout = http_get('user/logout').json()
-		assertEqual(response_logout.get('code'),	200) #valid
+		self.assertEqual(response_logout.status_code,	200, 'logout failed') #valid
 
 
 

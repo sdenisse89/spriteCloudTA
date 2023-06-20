@@ -6,6 +6,8 @@ import requests
 url = 'https://petstore.swagger.io/v2/'
 api_key = 'special-key'
 
+api_headers ={'accept':'application/json','Content-Type':'application/json'}
+
 # PET DATA
 #=========================================================
 data_pet_a = {
@@ -87,30 +89,32 @@ data_order_petA = {
 	"quantity": 0,
 	"shipDate": "2023-06-20T19:53:07.829Z",
 	"status": "placed",
-	"complete": true
-}
+	"complete": "true"
 }
 
 # HELPER FUNCTIONS
 #=========================================================
 
 def http_get(req,**kwargs):
-	response = requests.get(url+req,**kwargs)
+	response = requests.get(url+req,headers=api_headers,**kwargs)
 	# Print the response
+	print('GET: '+req+' - '+str(response)+' // '+response.text)
 	return response
 
 def http_post(req,**kwargs):
-	response = requests.post(url+req,**kwargs)
-	print(response.text)
+	response = requests.post(url+req,headers=api_headers,**kwargs)
+	print('POST: '+req+' - '+str(response))
 	# Print the response
 	return response
 
 def http_delete(req,**kwargs):
-	response = requests.delete(url+req,**kwargs)
+	response = requests.delete(url+req,headers=api_headers,**kwargs)
 	# Print the response
+	print('DELETE: '+req+' - '+str(response))
 	return response
 	
 def http_put(req,**kwargs):
-	response = requests.put(url+req,**kwargs)
+	response = requests.put(url+req,headers=api_headers,**kwargs)
 	# Print the response
+	print('PUT: '+req+' - '+str(response))
 	return response
